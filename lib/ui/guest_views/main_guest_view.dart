@@ -287,13 +287,31 @@ class _MainGuestWebPageState extends State<MainGuestWebPage> {
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                house.name,
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primaryColor,
-                    fontSize: 32),
+              Row(
+                children: [
+                  Text(
+                    house.name,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primaryColor,
+                        fontSize: 32),
+                  ),
+                  Spacer(),
+                  if (house.price != null)
+                    Text(
+                      'PEN ${house.price} por noche',
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primaryColor,
+                          fontSize: 24),
+                    ),
+                ],
               ),
+              if (house.description != null)
+                Text(
+                  house.description!,
+                  style: const TextStyle(color: Colors.grey),
+                ),
               Row(
                 children: [
                   Icon(Icons.place, color: Colors.grey),
@@ -329,23 +347,111 @@ class _MainGuestWebPageState extends State<MainGuestWebPage> {
                       backgroundColor: AppColors.primaryColor,
                     ),
                     onPressed: () async {
-                      final _repo = ReservationRepositryImpl();
-                      await _repo.createReservation(
-                        Reservation(
-                          userId: user!.userId,
-                          houseId: house.id!,
-                          initDate: _initDateController.text,
-                          endDate: _endDateController.text,
-                          persons: int.parse(_personsController.text),
-                        ),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content:
-                              Text('Intensión de reserva realizada con exito'),
-                          backgroundColor: Colors.green,
-                        ),
-                      );
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            final init =
+                                DateTime.parse(_initDateController.text);
+                            final end = DateTime.parse(_endDateController.text);
+                            final diff = end.difference(init).inDays;
+
+                            return Dialog(
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width / 3,
+                                child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Text('Confirmar reserva',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 32,
+                                            color: AppColors.primaryColor,
+                                          )),
+                                      const Divider(),
+                                      const SizedBox(height: 16),
+                                      Text('Desde: ${_initDateController.text}',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                            color: AppColors.primaryColor,
+                                          )),
+                                      const SizedBox(height: 8),
+                                      Text('Hasta: ${_endDateController.text}',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                            color: AppColors.primaryColor,
+                                          )),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                          'Personas: ${_personsController.text}',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                            color: AppColors.primaryColor,
+                                          )),
+                                      const SizedBox(height: 8),
+                                      Text('Dias: $diff',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                            color: AppColors.primaryColor,
+                                          )),
+                                      const SizedBox(height: 8),
+                                      Text('precio por noche: ${house.price!}',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                            color: AppColors.primaryColor,
+                                          )),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                          'Comision de Rent Experience (20%): ${(house.price! * diff) * 0.2}',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                            color: AppColors.primaryColor,
+                                          )),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                          'PRECIO TOTAL: ${house.price! * diff}',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                            color: AppColors.primaryColor,
+                                          )),
+                                      const SizedBox(height: 32),
+                                      TextButton(
+                                        onPressed: () async {
+                                          final _repo =
+                                              ReservationRepositryImpl();
+                                          await _repo.createReservation(
+                                            Reservation(
+                                              userId: user!.userId,
+                                              houseId: house.id!,
+                                              initDate:
+                                                  _initDateController.text,
+                                              endDate: _endDateController.text,
+                                              persons: int.parse(
+                                                  _personsController.text),
+                                            ),
+                                          );
+                                          Navigator.pop(context);
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                  'Intensión de reserva realizada con exito'),
+                                              backgroundColor: Colors.green,
+                                            ),
+                                          );
+                                        },
+                                        child: Text('Confirmar'),
+                                      )
+                                    ]),
+                              ),
+                            );
+                          });
                     },
                     child: const Text(
                       'Reservar',

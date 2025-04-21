@@ -18,6 +18,8 @@ class HouseRepositoryImpl implements HouseRepository {
         "place": house.place,
         //"status": house.status,
         "imagesIds": house.imagesIds,
+        "price": house.price,
+        "description": house.description,
       },
     );
   }

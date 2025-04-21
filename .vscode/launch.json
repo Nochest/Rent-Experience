@@ -1,0 +1,26 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "tesis_airbnb_web",
+        "request": "launch",
+        "type": "dart",
+        "args": ["-d", "chrome", "--web-port=5000"]
+      },
+      {
+        "name": "tesis_airbnb_web (profile mode)",
+        "request": "launch",
+        "type": "dart",
+        "flutterMode": "profile",
+        "args": ["-d", "chrome", "--web-port=5000"]
+      },
+      {
+        "name": "tesis_airbnb_web (release mode)",
+        "request": "launch",
+        "type": "dart",
+        "flutterMode": "release",
+        "args": ["-d", "chrome", "--web-port=5000"]
+      }
+    ]
+  }
+  

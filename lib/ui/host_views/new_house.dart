@@ -30,7 +30,10 @@ class _NuevoAlojamientoFormState extends State<NuevoAlojamientoForm> {
   List<Uint8List> imagenesSeleccionadas = [];
   final _formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
+  final descriptionController = TextEditingController();
   final placeController = TextEditingController();
+  final priceController = TextEditingController();
+
   String? _selectedType = 'Casa';
   bool isLoading = false;
 
@@ -82,6 +85,12 @@ class _NuevoAlojamientoFormState extends State<NuevoAlojamientoForm> {
                       decoration: const InputDecoration(labelText: 'Nombre'),
                     ),
                     const SizedBox(height: 16),
+                    TextFormField(
+                      controller: descriptionController,
+                      decoration:
+                          const InputDecoration(labelText: 'Descripción'),
+                    ),
+                    const SizedBox(height: 16),
                     DropdownButtonFormField<String>(
                       value: _selectedType,
                       decoration: const InputDecoration(
@@ -102,6 +111,12 @@ class _NuevoAlojamientoFormState extends State<NuevoAlojamientoForm> {
                     TextFormField(
                       controller: placeController,
                       decoration: const InputDecoration(labelText: 'Ubicación'),
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: priceController,
+                      decoration:
+                          const InputDecoration(labelText: 'Precio por noche'),
                     ),
                     const SizedBox(height: 32),
                     Row(
@@ -208,6 +223,8 @@ class _NuevoAlojamientoFormState extends State<NuevoAlojamientoForm> {
                                 type: _selectedType ?? 'Casa',
                                 place: placeController.text,
                                 imagesIds: fileIds,
+                                price: double.parse(priceController.text),
+                                description: descriptionController.text,
                               ));
                               setState(() {
                                 isLoading = false;

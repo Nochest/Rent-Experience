@@ -80,10 +80,18 @@ class _LoginPageState extends State<LoginPage> {
     try {
       final r = await AppwriteApiClient.account
           .createEmailPasswordSession(email: email, password: password);
-      inspect(r);
       return r;
     } on AppwriteException catch (e) {
       log('login error: $e');
+      if (e.code == 429) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content:
+                Text('Demasiados intentos. Intenta de nuevo en unos segundos.'),
+            backgroundColor: Colors.orange,
+          ),
+        );
+      }
       return null;
     }
   }

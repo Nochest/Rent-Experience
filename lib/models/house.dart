@@ -6,13 +6,16 @@ class House {
   final String place;
   final String? status;
   final List<String>? imagesIds;
-
+  final double? price;
+  final String? description;
   House({
     this.id,
     required this.userId,
     required this.name,
     required this.type,
     required this.place,
+    required this.price,
+    required this.description,
     this.status,
     this.imagesIds = const [],
   });
@@ -25,6 +28,8 @@ class House {
       'place': place,
       'status': status,
       'imagesIds': imagesIds,
+      'price': price,
+      'description': description
     };
   }
 
@@ -36,6 +41,8 @@ class House {
       type: map['type'],
       place: map['place'],
       status: map['status'],
+      price: map['price'],
+      description: map['description'],
       imagesIds: List<String>.from(map['imagesIds'] as List),
     );
   }
