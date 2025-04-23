@@ -12,7 +12,6 @@ import 'package:tesis_airbnb_web/models/user.dart';
 import 'package:tesis_airbnb_web/repository/impl/house_repository_impl.dart';
 import 'package:tesis_airbnb_web/theme/colors.dart';
 import 'package:tesis_airbnb_web/ui/admin_views/review_house.dart';
-import 'package:tesis_airbnb_web/ui/host_views/new_house.dart';
 import 'package:tesis_airbnb_web/utils/cons.dart';
 
 class DashboardPage extends StatefulWidget {

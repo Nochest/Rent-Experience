@@ -26,7 +26,7 @@ class LightTheme {
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
-        shadowColor: Colors.grey.withOpacity(0.2),
+        shadowColor: Colors.grey.withAlpha(51),
         elevation: 2,
       ),
     ),
@@ -58,15 +58,15 @@ class LightTheme {
     ),
     dialogBackgroundColor: Colors.white,
     checkboxTheme: CheckboxThemeData(
-      checkColor: MaterialStateProperty.all(Colors.white),
-      fillColor: MaterialStateProperty.all(Colors.black),
+      checkColor: WidgetStatePropertyAll(Colors.white),
+      fillColor: WidgetStatePropertyAll(Colors.black),
     ),
     radioTheme: RadioThemeData(
-      fillColor: MaterialStateProperty.all(Colors.black),
+      fillColor: WidgetStatePropertyAll(Colors.black),
     ),
     switchTheme: SwitchThemeData(
-      thumbColor: MaterialStateProperty.all(Colors.black),
-      trackColor: MaterialStateProperty.all(Colors.grey.shade400),
+      thumbColor: WidgetStatePropertyAll(Colors.black),
+      trackColor: WidgetStatePropertyAll(Colors.grey.shade400),
     ),
     inputDecorationTheme: InputDecorationTheme(
       fillColor: Colors.white,

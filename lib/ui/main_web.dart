@@ -1,9 +1,16 @@
+import 'dart:async';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tesis_airbnb_web/data/appwrite_setting.dart';
+import 'package:tesis_airbnb_web/models/house.dart';
+import 'package:tesis_airbnb_web/repository/impl/house_repository_impl.dart';
 import 'package:tesis_airbnb_web/theme/colors.dart';
+import 'package:tesis_airbnb_web/utils/cons.dart';
 import 'package:tesis_airbnb_web/widgets/sign_up_dialog.dart';
 
-//TODO: REFACTOR TO WIX MODEL
 class MainWebPage extends StatefulWidget {
   const MainWebPage({super.key});
 
@@ -12,6 +19,27 @@ class MainWebPage extends StatefulWidget {
 }
 
 class _MainWebPageState extends State<MainWebPage> {
+  bool loading = false;
+  List<House> houses = [];
+  final houseRepository = HouseRepositoryImpl();
+
+  @override
+  void initState() {
+    super.initState();
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      setState(() {
+        loading = true;
+      });
+
+      final fetchedHouses = await houseRepository.getApprovedHouses();
+
+      setState(() {
+        houses = fetchedHouses;
+        loading = false;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,147 +134,52 @@ class _MainWebPageState extends State<MainWebPage> {
                   const EdgeInsets.symmetric(horizontal: 120, vertical: 16),
               margin: const EdgeInsets.all(16.0),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Sugerencias de alojamientos',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.primaryColor,
-                          fontSize: 36,
-                        ),
-                      ),
-                      Text(
-                        'Lugares más visitados',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 32),
-                  GridView(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 8.0,
-                      mainAxisSpacing: 8.0,
-                      childAspectRatio: 4 / 3,
+                  Text(
+                    'Sugerencias de alojamientos',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primaryColor,
+                      fontSize: 36,
                     ),
-                    children: [
-                      _buildCard(
-                        imageUrl:
-                            'assets/background-main.jpg', // Reemplázalo con tu imagen
-                        title: "Casa en la playa",
-                        distance: "5 km",
-                        dates: "02/10/2025 - 05/10/2025",
-                        price: "S/ 150.00 por noche",
-                      ),
-                      _buildCard(
-                        imageUrl: 'assets/background-main.jpg',
-                        title: "Apartamento en la ciudad",
-                        distance: "1.2 km",
-                        dates: "10/12/2025 - 12/12/2025",
-                        price: "S/ 120.00 por noche",
-                      ),
-                      _buildCard(
-                        imageUrl: 'assets/background-main.jpg',
-                        title: "Cabaña en la montaña",
-                        distance: "15 km",
-                        dates: "20/11/2025 - 22/11/2025",
-                        price: "S/ 200.00 por noche",
-                      ),
-                      _buildCard(
-                        imageUrl: 'assets/background-main.jpg',
-                        title: "Villa de lujo",
-                        distance: "3.5 km",
-                        dates: "05/01/2025 - 07/01/2025",
-                        price: "S/ 350.00 por noche",
-                      ),
-                      _buildCard(
-                        imageUrl: 'assets/background-main.jpg',
-                        title: "Estudio en el centro",
-                        distance: "2 km",
-                        dates: "08/02/2025 - 10/02/2025",
-                        price: "S/ 90.00 por noche",
-                      ),
-                      _buildCard(
-                        imageUrl: 'assets/background-main.jpg',
-                        title: "Departamento con vista al mar",
-                        distance: "12 km",
-                        dates: "15/08/2025 - 18/08/2025",
-                        price: "S/ 250.00 por noche",
-                      ),
-                      _buildCard(
-                        imageUrl: 'assets/background-main.jpg',
-                        title: "Loft moderno",
-                        distance: "7 km",
-                        dates: "22/09/2025 - 25/09/2025",
-                        price: "S/ 180.00 por noche",
-                      ),
-                      _buildCard(
-                        imageUrl: 'assets/background-main.jpg',
-                        title: "Loft moderno",
-                        distance: "7 km",
-                        dates: "22/09/2025 - 25/09/2025",
-                        price: "S/ 180.00 por noche",
-                      ),
-                      _buildCard(
-                        imageUrl: 'assets/background-main.jpg',
-                        title: "Loft moderno",
-                        distance: "7 km",
-                        dates: "22/09/2025 - 25/09/2025",
-                        price: "S/ 180.00 por noche",
-                      ),
-                      _buildCard(
-                        imageUrl: 'assets/background-main.jpg',
-                        title: "Loft moderno",
-                        distance: "7 km",
-                        dates: "22/09/2025 - 25/09/2025",
-                        price: "S/ 180.00 por noche",
-                      ),
-                      _buildCard(
-                        imageUrl: 'assets/background-main.jpg',
-                        title: "Loft moderno",
-                        distance: "7 km",
-                        dates: "22/09/2025 - 25/09/2025",
-                        price: "S/ 180.00 por noche",
-                      ),
-                      _buildCard(
-                        imageUrl: 'assets/background-main.jpg',
-                        title: "Loft moderno",
-                        distance: "7 km",
-                        dates: "22/09/2025 - 25/09/2025",
-                        price: "S/ 180.00 por noche",
-                      ),
-                      _buildCard(
-                        imageUrl: 'assets/background-main.jpg',
-                        title: "Loft moderno",
-                        distance: "7 km",
-                        dates: "22/09/2025 - 25/09/2025",
-                        price: "S/ 180.00 por noche",
-                      ),
-                      _buildCard(
-                        imageUrl: 'assets/background-main.jpg',
-                        title: "Loft moderno",
-                        distance: "7 km",
-                        dates: "22/09/2025 - 25/09/2025",
-                        price: "S/ 180.00 por noche",
-                      ),
-                      _buildCard(
-                        imageUrl: 'assets/background-main.jpg',
-                        title: "Loft moderno",
-                        distance: "7 km",
-                        dates: "22/09/2025 - 25/09/2025",
-                        price: "S/ 180.00 por noche",
-                      ),
-                    ],
+                  ),
+                  Text(
+                    'Lugares más visitados',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),
+            ),
+            Column(
+              children: [
+                SizedBox(height: 32),
+                ListView.separated(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, i) {
+                    return FutureBuilder<List<Uint8List>>(
+                      future: _loadImages(houses[i].imagesIds),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return const SizedBox.shrink();
+                        }
+
+                        return _buildCard(
+                          house: houses[i],
+                          imagesBytes: snapshot.data!,
+                        );
+                      },
+                    );
+                  },
+                  separatorBuilder: (_, __) =>
+                      const Divider(color: Colors.grey, thickness: 1),
+                  itemCount: houses.length,
+                ),
+              ],
             ),
           ],
         ),
@@ -255,61 +188,189 @@ class _MainWebPageState extends State<MainWebPage> {
   }
 
   Widget _buildCard({
-    required String imageUrl,
-    required String title,
-    required String distance,
-    required String dates,
-    required String price,
+    required House house,
+    required List<Uint8List> imagesBytes,
   }) {
-    return Card(
-      margin: EdgeInsets.all(8.0),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      elevation: 5,
-      child: Container(
-        width: MediaQuery.of(context).size.width /
-            4, // 1/4 del ancho de la pantalla
-        child: Column(
-          children: [
-            // Imagen de la tarjeta
-            ClipRRect(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-              child: Image.asset(
-                imageUrl,
-                height: 150, // Alto de la imagen
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
-            ),
-            // Contenido de la tarjeta
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+    return Container(
+      padding: const EdgeInsets.only(right: 16),
+      decoration: BoxDecoration(
+          color: Colors.grey.shade200, borderRadius: BorderRadius.circular(12)),
+      child: Row(
+        children: [
+          ImageCarousel(images: imagesBytes),
+          const SizedBox(width: 16),
+          Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
                 children: [
-                  // Título
                   Text(
-                    title,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
+                    house.name,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primaryColor,
+                        fontSize: 32),
                   ),
-                  SizedBox(height: 4),
-                  // Distancia
-                  Text("Distancia: $distance", style: TextStyle(fontSize: 14)),
-                  // Fechas
-                  Text("Fechas: $dates", style: TextStyle(fontSize: 14)),
-                  // Precio
-                  Text(price, style: TextStyle(fontSize: 14)),
+                  Spacer(),
+                  if (house.price != null)
+                    Text(
+                      'PEN ${house.price} por noche',
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primaryColor,
+                          fontSize: 24),
+                    ),
                 ],
               ),
-            ),
-          ],
+              if (house.description != null)
+                Text(
+                  house.description!,
+                  style: const TextStyle(color: Colors.grey),
+                ),
+              Row(
+                children: [
+                  Icon(Icons.place, color: Colors.grey),
+                  Text(
+                    house.place,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey,
+                      fontSize: 24,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  _ServicioItem(icon: Icons.wifi, label: 'WiFi'),
+                  _ServicioItem(icon: Icons.shower, label: 'Ducha caliente'),
+                  _ServicioItem(icon: Icons.tv, label: 'TV'),
+                  _ServicioItem(icon: Icons.ac_unit, label: 'Aire Acond.'),
+                  _ServicioItem(icon: Icons.kitchen, label: 'Cocina'),
+                  _ServicioItem(icon: Icons.local_parking, label: 'Parking'),
+                ],
+              ),
+              SizedBox(height: 72),
+            ],
+          ))
+        ],
+      ),
+    );
+  }
+
+  Future<List<Uint8List>> _loadImages(List<String>? imageIds) async {
+    if (imageIds == null) return [];
+    return Future.wait(imageIds.map((id) => getImageBytes(id)));
+  }
+
+  Future<Uint8List> getImageBytes(String fileId) async {
+    final response = await AppwriteApiClient.storage.getFileView(
+      bucketId: Constants.bucketHousesId,
+      fileId: fileId,
+    );
+    return response;
+  }
+}
+
+class ImageCarousel extends StatefulWidget {
+  final List<Uint8List> images;
+
+  const ImageCarousel({super.key, required this.images});
+
+  @override
+  State<ImageCarousel> createState() => _ImageCarouselState();
+}
+
+class _ImageCarouselState extends State<ImageCarousel> {
+  late final PageController _controller;
+  late final Timer _timer;
+  int _currentPage = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = PageController(initialPage: 0);
+
+    _timer = Timer.periodic(const Duration(seconds: 3), (_) {
+      if (_controller.hasClients && widget.images.isNotEmpty) {
+        _currentPage = (_currentPage + 1) % widget.images.length;
+        _controller.animateToPage(
+          _currentPage,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final containerWidth = screenWidth / 3;
+
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Container(
+        width: containerWidth,
+        height: 300,
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.circular(12),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: PageView.builder(
+          controller: _controller,
+          itemCount: widget.images.length,
+          itemBuilder: (context, index) {
+            return Image.memory(
+              widget.images[index],
+              fit: BoxFit.cover,
+              width: containerWidth,
+              height: 200,
+            );
+          },
         ),
       ),
+    );
+  }
+}
+
+class _ServicioItem extends StatelessWidget {
+  final IconData icon;
+  final String label;
+
+  const _ServicioItem({required this.icon, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Icon(
+          icon,
+          size: 28,
+          color: Colors.grey,
+        ),
+        SizedBox(height: 4),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            color: Colors.grey,
+            fontWeight: FontWeight.w500,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ],
     );
   }
 }

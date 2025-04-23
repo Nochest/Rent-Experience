@@ -423,9 +423,8 @@ class _MainGuestWebPageState extends State<MainGuestWebPage> {
                                       const SizedBox(height: 32),
                                       TextButton(
                                         onPressed: () async {
-                                          final _repo =
-                                              ReservationRepositryImpl();
-                                          await _repo.createReservation(
+                                          await ReservationRepositryImpl()
+                                              .createReservation(
                                             Reservation(
                                               userId: user!.userId,
                                               houseId: house.id!,

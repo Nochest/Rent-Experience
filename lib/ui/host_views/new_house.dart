@@ -217,7 +217,7 @@ class _NuevoAlojamientoFormState extends State<NuevoAlojamientoForm> {
                                   return file.$id;
                                 }),
                               );
-                              final r = await HouseRepositoryImpl().add(House(
+                              await HouseRepositoryImpl().add(House(
                                 userId: widget.userId,
                                 name: nameController.text,
                                 type: _selectedType ?? 'Casa',
